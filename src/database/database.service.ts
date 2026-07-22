@@ -1,7 +1,8 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client/extension';
-import { PrismaPg } from 'node_modules/@prisma/adapter-pg/dist/index.mjs';
-import { Pool } from 'node_modules/@types/pg/index.mjs';
+import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { Pool } from 'pg';
+import "dotenv/config";
 
 @Injectable()
 export class DatabaseService extends PrismaClient implements OnModuleInit {

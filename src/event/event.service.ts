@@ -1,26 +1,60 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
+import { DatabaseService } from 'src/database/database.service';
 
 @Injectable()
 export class EventService {
-  create(createEventDto: CreateEventDto) {
-    return 'This action adds a new event';
+  constructor(private database: DatabaseService) {}
+
+  async create(createEventDto: CreateEventDto) {
+    return await this.database.event.create({
+      data: {
+        name: createEventDto.name,
+        description: createEventDto.description,
+        startsAt: createEventDto.startsAt,
+        endsAt: createEventDto.endsAt,
+      },
+    });
   }
 
-  findAll() {
-    return `This action returns all event`;
+  async findAll() {
+    return await this.database.event.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} event`;
+  async findOne(id: number) {
+    const result = await this.database.event.findUnique({
+      where: {
+        eventId: id,
+      },
+    });
+    if (result === null) {
+      throw new NotFoundException(`Event with ID ${id} not found`);
+    }
+    return result;
   }
 
-  update(id: number, updateEventDto: UpdateEventDto) {
-    return `This action updates a #${id} event`;
+  async update(id: number, updateEventDto: UpdateEventDto) {
+    await this.findOne(id);
+    return this.database.event.update({
+      where: {
+        eventId: id,
+      },
+      data: {
+        name: updateEventDto.name,
+        description: updateEventDto.description,
+        startsAt: updateEventDto.startsAt,
+        endsAt: updateEventDto.endsAt,
+      },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} event`;
+  async remove(id: number) {
+    await this.findOne(id);
+    return this.database.event.delete({
+      where: {
+        eventId: id,
+      },
+    });
   }
 }
