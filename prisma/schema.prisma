@@ -1,0 +1,27 @@
+generator client {
+    provider = "prisma-client-js"
+    output = "../node_modules/.prisma/client"
+}
+
+datasource db {
+    provider = "postgresql"
+}
+
+enum Status {
+    DRAFT
+    CONFIRMED
+    LIVE
+    COMPLETED
+    CANCELLED
+}
+
+model Event {
+    eventId Int @id @default(autoincrement())
+    name String @unique
+    description String
+    startsAt DateTime
+    endsAt DateTime
+    status Status @default(DRAFT)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
