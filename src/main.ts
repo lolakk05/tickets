@@ -17,4 +17,7 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
   await app.listen(process.env.PORT ?? 3000);
 }
-bootstrap();
+bootstrap().catch((err) => {
+  console.error('Error starting the application:', err);
+  process.exitCode = 1;
+});
