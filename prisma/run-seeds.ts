@@ -1,10 +1,10 @@
-import { seed } from "./seed"
+import { seed } from './seed';
 
 async function main() {
-    await seed();
+  await seed();
 }
 
 main().catch((e) => {
-    console.error(e);
-    process.exit(1);
+  console.error(e);
+  process.exit(1);
 });
